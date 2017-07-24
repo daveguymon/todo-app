@@ -1,20 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-class IndividualTask extends Component {
-  constructor(props) {
-    super(props);
-    this.state={
-      clicked: false
-    }
+const IndividualTask = (props) => {
 
-    this.completeTask = this.completeTask.bind(this);
-  }
-
-  completeTask() {
-    this.setState({ clicked: true})
-  }
-
-  render() {
     const completedStyle = {
       textDecoration: "line-through",
       color: "grey"
@@ -22,13 +9,13 @@ class IndividualTask extends Component {
 
       return (
         <div>
-          <p style={ !this.state.clicked ? null : completedStyle } >{this.props.task}</p>
-          <button onClick={ this.completeTask } disabled={ this.state.clicked }>Complete</button>
-          <button onClick={ () => this.props.delete(this.props.index) }>Remove</button>
+          <p style={ !props.task.completed ? null : completedStyle }>{props.task.title}</p>
+          <button onClick={ ()=> props.completed(props.task.id) } disabled={ props.task.completed }>Complete</button>
+          <button onClick={ () => props.delete(props.task.id) }>Remove</button>
         </div>
       )
     }
-  }
+
 
 
 export default IndividualTask;

@@ -21,6 +21,9 @@ class App extends Component {
 
       this.deleteTask = this.deleteTask.bind(this);
 
+      this.completeTask = this.completeTask.bind(this);
+
+
 
   }
 
@@ -29,9 +32,14 @@ class App extends Component {
   }
 
   handleButtonClick() {
+    let id = 0;
     if(this.state.newTodo) {
+      if(this.state.allTodos.length) {
+        id = this.state.allTodos.length
+      }
+      var newTask = { id, title: this.state.newTodo, completed: false }
       this.setState({
-        allTodos: [...this.state.allTodos, this.state.newTodo],
+        allTodos: [...this.state.allTodos, newTask ],
         newTodo: ''
        })
     } else {
@@ -40,18 +48,30 @@ class App extends Component {
 
   }
 
-  deleteTask(i) {
-    this.setState({ allTodos: this.state.allTodos.filter(( task, index ) => index !== i ) })
+  deleteTask(id) {
+    this.setState({ allTodos: this.state.allTodos.filter(( task ) => task.id !== id ) })
+  }
+
+  completeTask(id) {
+    this.setState({
+      allTodos: this.state.allTodos.map( task => {
+      if( task.id === id) {
+        task.completed = !task.completed;
+      }
+      return task;
+      })
+    })
   }
 
 
   render() {
 
-    const myTodos = this.state.allTodos.map( (task, i) => <IndividualTask
+    const myTodos = this.state.allTodos.map( (taskObj) => <IndividualTask
       delete={this.deleteTask}
-      key={i}
-      index={i}
-      task={task}/>)
+      key={taskObj.id}
+      task={taskObj}
+      completed = {this.completeTask}
+      />)
 
     return (
       <div className="App">
