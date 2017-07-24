@@ -4,19 +4,24 @@
 import React, { Component } from 'react';
 import './App.css';
 import Form from './components/Form';
-import Individual_Task from './components/Individual_Task';
+import IndividualTask from './components/Individual_Task';
 
 class App extends Component {
   constructor(props) {
     super(props);
       this.state={
         allTodos: [],
-        newTodo: ''
+        newTodo: '',
+        styling: false
       }
 
       this.handleInputChange = this.handleInputChange.bind(this);
 
       this.handleButtonClick = this.handleButtonClick.bind(this);
+
+      this.deleteTask = this.deleteTask.bind(this);
+
+
   }
 
   handleInputChange(event) {
@@ -24,17 +29,28 @@ class App extends Component {
   }
 
   handleButtonClick() {
-    this.setState({
-      allTodos: [...this.state.allTodos, this.state.newTodo],
-      newTodo: ''
-     })
+    if(this.state.newTodo) {
+      this.setState({
+        allTodos: [...this.state.allTodos, this.state.newTodo],
+        newTodo: ''
+       })
+    } else {
+      alert("Must add new task.")
+    }
+
   }
+
+  deleteTask(i) {
+    this.setState({ allTodos: this.state.allTodos.filter(( task, index ) => index !== i ) })
+  }
+
 
   render() {
 
-    const myTodos = this.state.allTodos.map( (task, index) => <Individual_Task
-      key={index}
-      index={index}
+    const myTodos = this.state.allTodos.map( (task, i) => <IndividualTask
+      delete={this.deleteTask}
+      key={i}
+      index={i}
       task={task}/>)
 
     return (
